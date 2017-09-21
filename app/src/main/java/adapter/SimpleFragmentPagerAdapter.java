@@ -5,34 +5,38 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.vukhachoi.muisicapp.Fragment_List;
+import com.example.vukhachoi.muisicapp.Fragment_Play;
+import com.example.vukhachoi.muisicapp.layoutFragment;
+import com.example.vukhachoi.muisicapp.layoutFragment_2;
 
 /**
  * Created by Vu Khac Hoi on 9/20/2017.
  */
 
 public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
-
+  private   layoutFragment fragment;
     private Context mContext;
     public SimpleFragmentPagerAdapter(Context context,FragmentManager fm) {
         super(fm);
+        fragment = new layoutFragment();
         mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-           // return  new food_fragment();
-        } else if (position == 1){
-           // return new juice_fragment();
-        } else if (position == 2){
-           // return new cream_fragment();
 
-        } else {
-           // return new food_fragment();
+
+            return fragment;
+        } else if (position == 1) {
+            return new layoutFragment_2();
+        } else if (position == 2) {
+            return new Fragment_Play();
+
         }
-        return new Fragment_List();
+        return null;
     }
+
 
     @Override
     public int getCount() {
