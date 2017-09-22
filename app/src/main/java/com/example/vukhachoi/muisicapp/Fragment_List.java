@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,7 @@ import model.song;
 public class Fragment_List extends android.support.v4.app.Fragment{
     public  Fragment_List(){}
     ListView lsv;
-   public static List<song>listsong;
+   List<song>listsong;
     song_adapte songAdapter;
     Fragment Play;
     @Nullable
@@ -43,32 +45,41 @@ public class Fragment_List extends android.support.v4.app.Fragment{
         String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
         Play=new Fragment_Play();
         listsong=new ArrayList<>();
-        //get path from MediaStore
-        Cursor cur = cr.query(uri, null, selection, null, sortOrder);
-        int count = 0;
-        String data="";
-        String Artist="";
-        String Name="";
-        String ss="";
-        if(cur != null)
-        {
-            count = cur.getCount();
 
-            if(count > 0)
-            {
-                while(cur.moveToNext())
-                {
-                    data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    Artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    Name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-                    ss = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    listsong.add(new song(Name,ss,data,Artist));
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+
+            listsong= (List<song>) bundle.getSerializable("listbaihat1");
+
+
+
+        }else {
+            //get path from MediaStore
+            Cursor cur = cr.query(uri, null, selection, null, sortOrder);
+            int count = 0;
+            String data = "";
+            String Artist = "";
+            String Name = "";
+            String ss = "";
+            if (cur != null) {
+                count = cur.getCount();
+
+                if (count > 0) {
+                    while (cur.moveToNext()) {
+                        data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
+                        Artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                        Name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                        ss = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                        listsong.add(new song(Name, ss, data, Artist));
+                        Log.d("xx", ss);
+                    }
+
                 }
-
             }
-        }
 
-        cur.close();
+            cur.close();
+        }
 
 songAdapter=new song_adapte(getActivity(),R.layout.item_song,listsong);
         lsv.setAdapter(songAdapter);
@@ -78,7 +89,8 @@ songAdapter.notifyDataSetChanged();
 lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        ViewPager viewPager=getActivity().findViewById(R.id.view_pager);
+        viewPager.setCurrentItem(0);
         FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
 
@@ -90,10 +102,10 @@ lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         Play.setArguments(bundle);
 
 if(Fragment_Play.mpintro!=null) {
-    duration=Fragment_Play.mpintro.getCurrentPosition();
-    Fragment_Play oldFragment = (Fragment_Play) fragmentManager.findFragmentByTag("play");
-    FragmentTransaction fragmentTransaction1=fragmentManager.beginTransaction();
-    fragmentTransaction1.remove(oldFragment).commit();
+//    duration=Fragment_Play.mpintro.getCurrentPosition();
+//    Fragment_Play oldFragment = (Fragment_Play) fragmentManager.findFragmentByTag("play");
+//    FragmentTransaction fragmentTransaction1=fragmentManager.beginTransaction();
+//    fragmentTransaction1.remove(oldFragment).commit();
     Fragment_Play.mpintro.stop();
 }
           fragmentTransaction.replace(R.id.layout, Play, "play");
