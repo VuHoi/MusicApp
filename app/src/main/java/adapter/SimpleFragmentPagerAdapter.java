@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.vukhachoi.muisicapp.Fragment_Play;
+import com.example.vukhachoi.muisicapp.FragmentLayout_3;
 import com.example.vukhachoi.muisicapp.layoutFragment;
 import com.example.vukhachoi.muisicapp.layoutFragment_2;
 
@@ -31,7 +31,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             return new layoutFragment_2();
         } else if (position == 2) {
-            return new Fragment_Play();
+            return new FragmentLayout_3();
 
         }
         return null;
@@ -51,7 +51,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "Ca sĩ";
             case 2:
-                return "Thể loại";
+                return "Album";
 
             default:
                 return null;

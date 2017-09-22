@@ -23,20 +23,20 @@ import model.singer;
 import model.song;
 
 /**
- * Created by Vu Khac Hoi on 9/21/2017.
+ * Created by Vu Khac Hoi on 9/22/2017.
  */
 
-public class Fragment_Singer extends android.support.v4.app.Fragment {
-    public Fragment_Singer() {
+public class CategorySong extends android.support.v4.app.Fragment {
+    public CategorySong() {
     }
-    List<singer>singerList;
-    ListView lsvSinger;
-List<song>songList;
+ListView lsvAlbum;
+    List<singer> singerList;
+    List<song>songList;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.singer, container, false);
-        lsvSinger=view.findViewById(R.id.lsvSinger);
+        View view = inflater.inflate(R.layout.category_song, container, false);
+        lsvAlbum=view.findViewById(R.id.lsvAlbum);
         songList=new ArrayList<>();
         singerList=new ArrayList<>();
         ContentResolver cr = getActivity().getContentResolver();
@@ -46,7 +46,7 @@ List<song>songList;
         Cursor cur = cr.query(uri, null, selection, null, sortOrder);
         int count = 0;
         String data="";
-String Artist="";
+        String Artist="";
         String Name="";
 
         if(cur != null)
@@ -59,7 +59,8 @@ String Artist="";
                 {
                     data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
                     Name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    Artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    Artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+
                     singer singer1=new singer(Artist, data);
 
                     try {
@@ -81,11 +82,11 @@ String Artist="";
         cur.close();
 
         Singer_Adapter adapter=new Singer_Adapter(getActivity(),R.layout.item_singer,singerList);
-        lsvSinger.setAdapter(adapter);
+        lsvAlbum.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
 
-        lsvSinger.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lsvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ContentResolver cr = getActivity().getContentResolver();
@@ -109,7 +110,9 @@ String Artist="";
                             data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
                             Name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
                             Artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                            if(Artist.equals(singerList.get(i).getName()))
+
+                            String ALbum=cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                            if(ALbum.equals(singerList.get(i).getName()))
                             { songList.add(new song(Name, "", data, Artist));}
 
                         }
@@ -129,7 +132,7 @@ String Artist="";
 
                 fragment_list.setArguments(bundle);
 
-                fragmentTransaction2.add(R.id.layout2, fragment_list, "singer");
+                fragmentTransaction2.add(R.id.layout3, fragment_list, "singer");
                 fragmentTransaction2.addToBackStack("singer");
                 fragmentTransaction2.commit();
             }
@@ -137,4 +140,3 @@ String Artist="";
         return view;
     }
 }
-
